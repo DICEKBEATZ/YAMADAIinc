@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAMADAI inc. - 動画編集ポートフォリオ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== 基本設定 ===== */
+        :root {
+            --accent-color: #FF6B00;
+            --text-color: #333;
+            --background-color: #fff;
+            --overlay-color: rgba(0, 0, 0, 0.7);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        section {
+            padding: 5rem 0;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent-color);
+        }
+        
+        .btn:hover {
+            background-color: transparent;
+            color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* ===== ヘッダー ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            transition: all 0.3s ease;
+        }
+        
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 1px;
+        }
+        
+        .logo span {
+            color: var(--accent-color);
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-menu li {
+            margin-left: 2rem;
+        }
+        
+        .nav-menu a {
+            color: white;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* ===== ヒーローセクション ===== */
+        #hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            text-align: left;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 100%);
+            z-index: 1;
+        }
+        
+        .hero-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translateX(-50%) translateY(-50%);
+            object-fit: cover;
+            opacity: 0.85;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            padding-left: 5%;
+        }
+        
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: white;
+            line-height: 1.2;
+        }
+        
+        .hero-content p {
+            font-size: a1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        /* ===== ポートフォリオセクション ===== */
+        #portfolio {
+            background-color: #f9f9f9;
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .portfolio-item {
+            position: relative;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9のアスペクト比 */
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .portfolio-item iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .portfolio-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 10; /* 追加: iframeよりも上に表示 */
+        }
+        
+        .portfolio-item:hover .portfolio-info {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .portfolio-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .portfolio-info p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 3rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 10; /* 追加: iframeよりも上に表示 */
+            cursor: pointer; /* 追加: カーソルをポインターに */
+        }
+        
+        .portfolio-item:hover .play-btn {
+            opacity: 1;
+        }
+
+        /* モーダルウィンドウ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            width: 80%;
+            max-width: 1000px;
+            position: relative;
+        }
+        
+        .modal-content iframe {
+            width: 100%;
+            height: 56.25vw;
+            max-height: 562.5px;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* ===== サービスセクション ===== */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        
+        .service-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+        
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .service-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* ===== プロフィールセクション ===== */
+        #profile {
+            background-color: #f9f9f9;
+        }
+        
+        .profile-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+        
+        .profile-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        .profile-content p {
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        
+        .company-info {
+            margin-top: 2rem;
+        }
+        
+        .company-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+        
+        .company-info ul {
+            list-style: none;
+        }
+        
+        .company-info li {
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        
+        .skills-container {
+            margin-top: 2rem;
+        }
+        
+        .skills-container h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        .skills-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+        
+        .skill-item {
+            background-color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* ===== お問い合わせセクション ===== */
+        #contact {
+            text-align: center;
+        }
+        
+        .contact-info {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .contact-info p {
+            margin-bottom: 2rem;
+            color: #555;
+        }
+        
+        .contact-details {
+            margin-top: 2rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-right: 1rem;
+        }
+        
+        .contact-text {
+            font-size: 1.1rem;
+        }
+        
+        .contact-text a {
+            color: var(--accent-color);
+        }
+        
+        .contact-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== フッター ===== */
+        footer {
+            background-color: #222;
+            color: white;
+            padding: 3rem 0;
+        }
+        
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .footer-logo span {
+            color: var(--accent-color);
+        }
+        
+        .footer-nav {
+            display: flex;
+            list-style: none;
+        }
+        
+        .footer-nav li {
+            margin-left: 1.5rem;
+        }
+        
+        .footer-nav a:hover {
+            color: var(--accent-color);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* ===== レスポンシブデザイン ===== */
+        @media screen and (max-width: 1024px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background-color: #222;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: all 0.5s ease;
+                z-index: 1000;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .nav-menu li {
+                margin: 1.5rem 0;
+            }
+            
+            .hamburger {
+                display: block;
+                z-index: 1001;
+            }
+            
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-nav {
+                margin-top: 1.5rem;
+                justify-content: center;
+            }
+            
+            .footer-nav li:first-child {
+                margin-left: 0;
+            }
+        }
+        
+        @media screen and (max-width: 576px) {
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .skills-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header>
+        <div class="container">
+            <a href="#" class="logo">YAMADAI <span>inc.</span></a>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#hero">ホーム</a></li>
+                <li><a href="#portfolio">制作実績</a></li>
+                <li><a href="#services">サービス</a></li>
+                <li><a href="#profile">プロフィール</a></li>
+                <li><a href="#contact">お問い合わせ</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- ヒーローセクション -->
+    <section id="hero">
+        <div class="hero-overlay"></div>
+        <iframe class="hero-video" src="https://www.youtube.com/embed/CMRBPqbn6do?autoplay=1&mute=1&controls=0&showinfo=0&loop=1&playlist=CMRBPqbn6do&playsinline=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <div class="hero-content">
+            <h1>ビジョンを<span style="color: var(--accent-color);">実現</span>する</h1>
+            <p>クリエイティブな視点と確かな技術で、心に響く映像を制作します。企画から編集、納品まで一貫してサポート。</p>
+            <a href="#contact" class="btn">お問い合わせ</a>
+        </div>
+    </section>
+
+    <!-- ポートフォリオセクション -->
+    <section id="portfolio">
+        <div class="container">
+            <div class="section-title">
+                <h2>制作実績</h2>
+            </div>
+            <div class="portfolio-grid">
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/_OVrNo20g8o">
+                    <iframe src="https://www.youtube.com/embed/_OVrNo20g8o?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>iCure 社員着動画</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/pOHrazH6t4U">
+                    <iframe src="https://www.youtube.com/embed/pOHrazH6t4U?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>iCure 社員座談会</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/J72e1hh7kxo">
+                    <iframe src="https://www.youtube.com/embed/J72e1hh7kxo?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>iCure 社長副社長対談</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/7io91pxrP50">
+                    <iframe src="https://www.youtube.com/embed/7io91pxrP50?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>日本生命TEAM NACS トーク</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/-aqCrYo1QKo">
+                    <iframe src="https://www.youtube.com/embed/-aqCrYo1QKo?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>IIJインターネットとつくる未来「マグロの温度管理」編</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/bCklcPg8QTw">
+                    <iframe src="https://www.youtube.com/embed/bCklcPg8QTw?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>IIJ 30周年記念 社員インタビュー</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/ydBmnnKppCU">
+                    <iframe src="https://www.youtube.com/embed/ydBmnnKppCU?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>DEMI ELEVATE スキンケア・ワークアウト</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/yf_h0zMug1A">
+                    <iframe src="https://www.youtube.com/embed/yf_h0zMug1A?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>DEMI ELEVATE ボディミスト</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/Kgz9-3cWU-g">
+                    <iframe src="https://www.youtube.com/embed/Kgz9-3cWU-g?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>DEMI ELEVATE スキャルプケア・ワークアウト</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/ePGP9u58Qlk">
+                    <iframe src="https://www.youtube.com/embed/ePGP9u58Qlk?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>DEMI ELEVATE カジノ編</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/xK7s3kzuszY">
+                    <iframe src="https://www.youtube.com/embed/xK7s3kzuszY?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>GOALD 90S RE</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/_Il4lao7pQE">
+                    <iframe src="https://www.youtube.com/embed/_Il4lao7pQE?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>MITTNESS BRAND MOVIE</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/XUKhlBOsWjs">
+                    <iframe src="https://www.youtube.com/embed/XUKhlBOsWjs?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>シェア畑 PV</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-video="https://www.youtube.com/embed/mwDRoSs5Oro">
+                    <iframe src="https://www.youtube.com/embed/mwDRoSs5Oro?mute=1&controls=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="portfolio-info">
+                        <h3>鳥取県 / 梨</h3>
+                    </div>
+                    <div class="play-btn">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- モーダルウィンドウ -->
+    <div class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <iframe frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- サービスセクション -->
+    <section id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>サービス</h2>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>撮影</h3>
+                    <p>4K対応カメラとプロ仕様の照明・音響機材を使用し、高品質な映像素材の撮影を提供。インタビュー、イベント、商品PRなど様々なシーンに対応します。</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-cut"></i>
+                    </div>
+                    <h3>動画編集</h3>
+                    <p>カット、テロップ、BGM、効果音、カラーグレーディングなど、映像の魅力を最大限に引き出す編集を行います。</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-pen-fancy"></i>
+                    </div>
+                    <h3>企画・構成</h3>
+                    <p>目的やターゲットに合わせた映像の企画立案、ストーリー構成、絵コンテ作成などをサポートします。</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>モーショングラフィックス</h3>
+                    <p>タイトルアニメーションやインフォグラフィックなど、視覚的に訴えるモーショングラフィックスを制作します。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- プロフィールセクション -->
+    <section id="profile">
+        <div class="container">
+            <div class="section-title">
+                <h2>プロフィール</h2>
+            </div>
+            <div class="profile-container">
+                <div class="profile-content">
+                    <h3>株式会社ヤマダイ</h3>
+                    <p>お客様の伝えたい想いを映像の力で形にするクリエイティブカンパニーです。企業VP、プロモーションビデオ、Web動画、SNS広告動画など、多岐にわたるジャンルの映像制作を手掛けています。常に最新のトレンドと技術を取り入れ、高品質な映像を提供することをお約束します。</p>
+                    
+                    <div class="company-info">
+                        <h4>会社情報</h4>
+                        <ul>
+                            <li><strong>資本金:</strong> 3,000,000円</li>
+                            <li><strong>住所:</strong> 〒152-0012 東京都目黒区洗足1-26-1-202</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="skills-container">
+                        <h4>スキル・特徴</h4>
+                        <div class="skills-list">
+                            <div class="skill-item">Adobe Premiere Pro</div>
+                            <div class="skill-item">After Effects</div>
+                            <div class="skill-item">Final Cut Pro</div>
+                            <div class="skill-item">DaVinci Resolve</div>
+                            <div class="skill-item">モーショングラフィックス</div>
+                            <div class="skill-item">ドローン空撮編集</div>
+                            <div class="skill-item">丁寧なコミュニケーション</div>
+                            <div class="skill-item">確かなヒアリング力</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- お問い合わせセクション -->
+    <section id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>お問い合わせ</h2>
+            </div>
+            <div class="contact-info">
+                <p>映像制作に関するご相談、お見積もり依頼など、お気軽にお問い合わせください。<br>メールでのご連絡をお待ちしております。</p>
+                
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            〒152-0012 東京都目黒区洗足1-26-1-202
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <a href="mailto:yamagishi@yamadai-img.co.jp">yamagishi@yamadai-img.co.jp</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="mailto:yamagishi@yamadai-img.co.jp" class="btn">メールでお問い合わせ</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <a href="#" class="footer-logo">YAMADAI <span>inc.</span></a>
+                <ul class="footer-nav">
+                    <li><a href="#hero">ホーム</a></li>
+                    <li><a href="#portfolio">実績</a></li>
+                    <li><a href="#services">サービス</a></li>
+                    <li><a href="#profile">プロフィール</a></li>
+                    <li><a href="#contact">お問い合わせ</a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                &copy; 2025 YAMADAI inc. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ハンバーガーメニュー
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+            this.querySelector('i').classList.toggle('fa-bars');
+            this.querySelector('i').classList.toggle('fa-times');
+        });
+        
+        // ナビゲーションリンクのスムーススクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (document.querySelector('.nav-menu').classList.contains('active')) {
+                    document.querySelector('.nav-menu').classList.remove('active');
+                    document.querySelector('.hamburger i').classList.add('fa-bars');
+                    document.querySelector('.hamburger i').classList.remove('fa-times');
+                }
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 70,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // ポートフォリオアイテムのモーダル表示
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+        const modal = document.querySelector('.modal');
+        const modalIframe = document.querySelector('.modal iframe');
+        const closeModal = document.querySelector('.close-modal');
+        
+        portfolioItems.forEach(item => {
+            const playBtn = item.querySelector('.play-btn');
+            playBtn.addEventListener('click', function(e) {
+                e.stopPropagation(); // バブリングを停止
+                const videoUrl = item.getAttribute('data-video');
+                modalIframe.src = `${videoUrl}?autoplay=1`;
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // iframeクリックイベントの伝播を停止
+            const iframe = item.querySelector('iframe');
+            iframe.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+        
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+            modalIframe.src = '';
+            document.body.style.overflow = 'auto';
+        });
+        
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                modalIframe.src = '';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // ヘッダーのスクロール時背景変更
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.padding = '0.5rem 0';
+                header.style.backgroundColor = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                header.style.padding = '1rem 0';
+                header.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            }
+        });
+    </script>
+</body>
+</html>
